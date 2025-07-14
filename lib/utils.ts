@@ -209,7 +209,17 @@ export const getTransactionStatus = (date: Date) => {
 //   email: z.email(),
 //   password: z.string().min(8),
 // })
-export const authFormSchema = z.object({
+export const authFormSchema = (type: String) => z.object({
+  // Sign up
+  firstName: type === 'sign-in' ? z.string().optional() : z.string().min(3),
+  lastName: type === 'sign-in' ? z.string().optional() : z.string().min(3),
+  address1: type === 'sign-in' ? z.string().optional() : z.string().min(3).max(50),
+  city: type === 'sign-in' ? z.string().optional() : z.string().min(3).max(50),
+  state: type === 'sign-in' ? z.string().optional() : z.string().min(3).max(50),
+  postalCode: type === 'sign-in' ? z.string().optional() : z.string().min(3).max(6),
+  dateOfBirth: type === 'sign-in' ? z.string().optional() : z.string(),
+  ssn: type === 'sign-in' ? z.string().optional() : z.string().min(3),
+  // Both
   email: z.email(),
   password: z.string().min(8, { message: "Password must be at least 8 characters long" }),
 });
