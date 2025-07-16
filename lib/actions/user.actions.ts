@@ -23,7 +23,7 @@ export const getUserInfo = async ({ userId }: getUserInfoProps) => {
             USER_COLLECTION_ID!,
             [Query.equal('userId', [userId])]
         );
-        return parseStringify(user?.documents?.[0]);
+        return parseStringify(user?.documents[0]);
     } catch (error) {
         console.error("An error occurred while getting the accounts:", error);
     }
@@ -246,7 +246,6 @@ export async function getBanks({ userId }: getBanksProps) {
         const banks = await database.listDocuments(DATABASE_ID!, BANK_COLLECTION_ID!, [
             Query.equal("userId", [userId])
         ]);
-        console.log("Banks", banks);
         return parseStringify(banks.documents);
     } catch (error) {
         console.error("An error occurred while getting the accounts:", error);

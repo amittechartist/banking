@@ -1,4 +1,5 @@
 import HeaderBox from '@/components/HeaderBox'
+import RecentTranstions from '@/components/RecentTranstions'
 import RightSidebar from '@/components/RightSidebar'
 import TotalBalanceBox from '@/components/TotalBalanceBox'
 import { getAccounts } from '@/lib/actions/bank.actions'
@@ -6,17 +7,16 @@ import { getBank, getLoggedInUser } from '@/lib/actions/user.actions'
 import React from 'react'
 
 const Home = async ({ searchParams: { id, page } }: SearchParamProps) => {
+    const currentPage = Number(page as string) || 1;
     const loggedIn = await getLoggedInUser();
-
     const accounts = await getAccounts({
-        userId: loggedIn?.userId
+        userId: loggedIn?.$id
     });
 
     if (!accounts) return;
 
     const accountsData = accounts?.data;
-    const appWriteItemsId = (id as string) || accountsData?.[0]?.appWriteItemId;
-
+    const appWriteItemsId = (id as string) || accountsData[0].appwriteItemId;
     const account = await getBank({
         documentId: appWriteItemsId
     });
@@ -38,12 +38,18 @@ const Home = async ({ searchParams: { id, page } }: SearchParamProps) => {
                     />
                 </header>
                 {/* RECENT TRANSACTIONS */}
+                <RecentTranstions
+                    accounts={accountsData}
+                    transactions={account?.transactions}
+                    appwriteItemId={appWriteItemsId}
+                    page={currentPage}
+                />
             </div>
             {/* Right Sidebar */}
             <RightSidebar
-                banks={accountsData?.slice(0, 2) || []}
+                banks={accountsData?.slice(0, 2)}
                 user={loggedIn}
-                transactions={accounts?.transactions || []}
+                transactions={account?.transactions}
             />
         </section>
     )
