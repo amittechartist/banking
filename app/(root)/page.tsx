@@ -2,7 +2,7 @@ import HeaderBox from '@/components/HeaderBox'
 import RecentTranstions from '@/components/RecentTranstions'
 import RightSidebar from '@/components/RightSidebar'
 import TotalBalanceBox from '@/components/TotalBalanceBox'
-import { getAccounts } from '@/lib/actions/bank.actions'
+import { getAccount, getAccounts } from '@/lib/actions/bank.actions'
 import { getBank, getLoggedInUser } from '@/lib/actions/user.actions'
 import React from 'react'
 
@@ -16,11 +16,11 @@ const Home = async ({ searchParams: { id, page } }: SearchParamProps) => {
     if (!accounts) return;
 
     const accountsData = accounts?.data;
-    const appWriteItemsId = (id as string) || accountsData[0].appwriteItemId;
-    const account = await getBank({
-        documentId: appWriteItemsId
+    const appwriteItemId = (id as string) || accountsData[0].appwriteItemId;
+    const account = await getAccount({
+        appwriteItemId
     });
-
+    
     return (
         <section className='home'>
             <div className='home-content'>
@@ -41,7 +41,7 @@ const Home = async ({ searchParams: { id, page } }: SearchParamProps) => {
                 <RecentTranstions
                     accounts={accountsData}
                     transactions={account?.transactions}
-                    appwriteItemId={appWriteItemsId}
+                    appwriteItemId={appwriteItemId}
                     page={currentPage}
                 />
             </div>
